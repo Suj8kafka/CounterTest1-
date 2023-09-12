@@ -36,9 +36,7 @@ const firebaseConfig = {
     visitorCountRef.transaction(count => (count || 0) + 1);
 
     // Decrement the visitor count when a visitor leaves (optional)
-    window.addEventListener('beforeunload', () => {
-      visitorCountRef.transaction(count => (count || 0) - 1);
-    });
+    
 
     // Get a reference to the visitor count element
     const visitorCountElement = document.getElementById('visitor-count');
