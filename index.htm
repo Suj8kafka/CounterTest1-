@@ -1,1 +1,53 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Real-time Visitor Count</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+</head>
+<body>
+  <h1>Real-time Visitor Count</h1>
+  <div id="visitor-count"></div>
+
+  <script>
+    // Your Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAfXF8OEfXpSjLY6YvqU22y2X0rTW2I7zY",
+  authDomain: "form-firebase-realtimedata.firebaseapp.com",
+  databaseURL: "https://form-firebase-realtimedata-default-rtdb.firebaseio.com",
+  projectId: "form-firebase-realtimedata",
+  storageBucket: "form-firebase-realtimedata.appspot.com",
+  messagingSenderId: "636354839867",
+  appId: "1:636354839867:web:ba4838a7f986688184231e",
+  measurementId: "G-27XNZ7BBS4"
+};
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Get a reference to the Realtime Database
+    const database = firebase.database();
+
+    // Get a reference to the visitor count in the database
+    const visitorCountRef = database.ref('visitorCount');
+
+    // Increment the visitor count when a new visitor arrives
+    visitorCountRef.transaction(count => (count || 0) + 1);
+
+    // Decrement the visitor count when a visitor leaves (optional)
+    window.addEventListener('beforeunload', () => {
+      visitorCountRef.transaction(count => (count || 0) - 1);
+    });
+
+    // Get a reference to the visitor count element
+    const visitorCountElement = document.getElementById('visitor-count');
+
+    // Listen for changes in the visitor count and update the display
+    visitorCountRef.on('value', snapshot => {
+      const count = snapshot.val();
+      visitorCountElement.textContent = `Visitors: ${count}`;
+    });
+  </script>
+</body>
+</html>
